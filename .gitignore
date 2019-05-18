@@ -107,3 +107,7 @@ venv.bak/
 .idea
 .vs
 .vscode
+
+# Data
+data/*
+!data/.keep

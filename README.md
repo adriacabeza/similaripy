@@ -1,5 +1,7 @@
 # Similaripy
 
+[![ForTheBadge built-with-love](http://ForTheBadge.com/images/badges/built-with-love.svg)](https://github.com/adriacabeza/similaripy/) ![forthebadge made-with-python](http://ForTheBadge.com/images/badges/made-with-python.svg)
+
 [![HitCount](http://hits.dwyl.io/adriacabeza/similaripy.svg)](http://hits.dwyl.io/adriacabeza/similaripy)
 [![GitHub stars](https://img.shields.io/github/stars/adriacabeza/similaripy.svg)](https://GitHub.com/adriacabeza/similaripy/stargazers/)
 [![GitHub forks](https://img.shields.io/github/forks/adriacabeza/similaripy.svg)](https://GitHub.com/adriacabeza/similaripy/network/)

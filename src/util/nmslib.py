@@ -1,5 +1,6 @@
 import nmslib
 
+
 class Nmslib:
 
     def __init__(self, metric='l2', method='hnsw'):

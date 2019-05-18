@@ -1,8 +1,5 @@
 import os
 import argparse
-import json
-
-
 
 from src import *
 from src.util import log
@@ -32,15 +29,6 @@ def _build():
     index.fit(x)
     index.save(index_path)
     log.info('Index built')
-
-    # PROVA QUE FARÉ PER SABER SI PUC PILLAR UN NUMPY ARRAY
-    array = helper.nmslib_to_nparray(index)
-    print(type(array))
-    print(array[:5])
-
-    with open('data/indexForVisualization.json', 'w') as f:
-        json.dumps(f)
-    
 
 
 if __name__ == '__main__':

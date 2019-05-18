@@ -2,7 +2,7 @@ import logging
 import sys
 
 
-__logger_stdout = logging.getLogger('donework')
+__logger_stdout = logging.getLogger('similaripy')
 
 __formatter = logging.Formatter('{%(name)s} - <%(asctime)s> - [%(levelname)-7s] - %(message)s')
 

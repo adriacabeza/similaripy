@@ -55,8 +55,13 @@ def _search(index):
             req_to_cl[j] = cl_id
         
         pbar.update(1)
+
+    similars = [list(cl) for cl in clusters.values()]
+    for i in range(0, len(similars)):
+        for j in range(0, len(similars[i])):
+            similars[i][j] = mapping[str(similars[i][j])]  
     
-    return list(clusters)
+    return similars
 
 
 def find_clusters():

@@ -1,5 +1,13 @@
 # Similaripy
 
+[![HitCount](http://hits.dwyl.io/adriacabeza/similaripy.svg)](http://hits.dwyl.io/adriacabeza/similaripy)
+[![GitHub stars](https://img.shields.io/github/stars/adriacabeza/similaripy.svg)](https://GitHub.com/adriacabeza/similaripy/stargazers/)
+[![GitHub forks](https://img.shields.io/github/forks/adriacabeza/similaripy.svg)](https://GitHub.com/adriacabeza/similaripy/network/)
+[![GitHub repo size in bytes](https://img.shields.io/github/repo-size/adriacabeza/similaripy.svg)](https://github.com/adriacabeza/similaripy)
+[![GitHub contributors](https://img.shields.io/github/contributors/adriacabeza/similaripy.svg)](https://GitHub.com/adriacabeza/similaripy/graphs/contributors/)
+[![GitHub license](https://img.shields.io/github/license/adriacabeza/similaripy.svg)](https://github.com/adriacabeza/similaripy/blob/master/LICENSE)
+
+
 📝 Approach for a better clustering built in HackNLP
 
 ## What we wanted to do

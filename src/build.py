@@ -5,6 +5,7 @@ from src import *
 from src.util import log
 from src.util import helper
 from src.util.nmslib import Nmslib
+from src.util.timer import Timer
 
 
 def _parse_args():
@@ -14,21 +15,22 @@ def _parse_args():
 
 
 def _build():
-    log.info('Loading JSON...')
-    json_path = os.path.join(args.output_path, JSON_FILE_NAME)
-    rows = helper.load_json(json_path)
-    log.info('JSON loaded. Number of requisites: {}'.format(len(rows)))
+    with Timer('Build index from requisites'):
 
-    log.info('Converting to Numpy Array...')
-    x = helper.to_nparray(rows)
-    log.info('Converted')
+        with Timer('Load JSON'):
+            json_path = os.path.join(args.output_path, JSON_FILE_NAME)
+            rows = helper.load_json(json_path)
+        log.info('JSON loaded. Number of requisites: {}'.format(len(rows)))
 
-    log.info('Building index...')
-    index_path = os.path.join(args.output_path, INDEX_FILE_NAME)
-    index = Nmslib()
-    index.fit(x)
-    index.save(index_path)
-    log.info('Index built')
+        with Timer('Convert to Numpy Array...'):
+            x = helper.to_nparray(rows)
+
+        log.info('Build index...')
+        with Timer('Index built'):
+            index_path = os.path.join(args.output_path, INDEX_FILE_NAME)
+            index = Nmslib()
+            index.fit(x)
+            index.save(index_path)
 
 
 if __name__ == '__main__':

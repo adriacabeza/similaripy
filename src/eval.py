@@ -26,24 +26,22 @@ def _eval_dup(dup, clusters):
 
 
 def get_matrix():
-    with Timer('Compute accuracy'):
+    with Timer('Load Validation duplicates JSON'):
+        with open(args.validation_duplicates_file) as f:
+            duplicates_requisites = json.load(f)
+            duplicates_requisites = duplicates_requisites['requirements']
+            duplicates_requisites = _chunks(duplicates_requisites, 2)
 
-        with Timer('Load Validation duplicates JSON'):
-            with open(args.validation_duplicates_file) as f:
-                duplicates_requisites = json.load(f)
-                duplicates_requisites = duplicates_requisites['requirements']
-                duplicates_requisites = _chunks(duplicates_requisites, 2)
+    with Timer('Load clusters JSON'):
+        with open(args.clusters_file) as f:
+            clusters = json.load(f)
 
-        with Timer('Load clusters JSON'):
-            with open(args.clusters_file) as f:
-                clusters = json.load(f)
-
-        with Timer('Eval clusters'):
-            correct = 0
-            total_groups = len(duplicates_requisites)
-            for dup in tqdm(duplicates_requisites, total=total_groups):
-                correct += _eval_dup(dup, clusters)
-            accuracy = (correct / total_groups) * 100
+    with Timer('Eval clusters'):
+        correct = 0
+        total_groups = len(duplicates_requisites)
+        for dup in tqdm(duplicates_requisites, total=total_groups):
+            correct += _eval_dup(dup, clusters)
+        accuracy = (correct / total_groups) * 100
 
     log.info('ACCURACY: {}%'.format(accuracy))
 

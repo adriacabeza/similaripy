@@ -1,9 +1,9 @@
 import argparse
-import itertools
 import json
 
 from tqdm import tqdm
 
+from src.util import log
 from src.util.timer import Timer
 
 
@@ -44,9 +44,7 @@ def get_matrix():
             for dup in tqdm(duplicates_requisites, total=total_groups):
                 correct += _eval_dup(dup, clusters)
 
-        print(correct)
-        print(total_groups)
-        print('{}%'.format((correct / total_groups) * 100))
+        log.info('Accuracy: {}%'.format((correct / total_groups) * 100))
 
 
 if __name__ == '__main__':

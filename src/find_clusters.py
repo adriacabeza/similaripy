@@ -68,26 +68,26 @@ def _search(index):
 
 def _metrics(clusters):
     total_requirements = int(np.concatenate(clusters).shape[0])
-    print('total_requirements: {}'.format(total_requirements))
+    log.info('total_requirements: {}'.format(total_requirements))
 
     dup_clusters = list(filter(lambda x: len(x) > 1, clusters))
     dup_requirements = int(np.concatenate(dup_clusters).shape[0]) if dup_clusters else 0
-    print('similar_requirements: {}'.format(dup_requirements))
+    log.info('similar_requirements: {}'.format(dup_requirements))
 
     unique_requirements = total_requirements - dup_requirements
-    print('unique_requirements: {}'.format(unique_requirements))
+    log.info('unique_requirements: {}'.format(unique_requirements))
 
     avg_cluster_size = float(np.mean(list(map(len, dup_clusters)))) if dup_requirements else 0
-    print('avg_cluster_size: {}'.format(avg_cluster_size))
+    log.info('avg_cluster_size: {}'.format(avg_cluster_size))
 
     max_cluster_size = int(np.max(list(map(len, dup_clusters)))) if dup_requirements else 0
-    print('max_cluster_size: {}'.format(max_cluster_size))
+    log.info('max_cluster_size: {}'.format(max_cluster_size))
 
     similar_pct = (dup_requirements / total_requirements) * 100
-    print('pct_duplicates: {}%'.format(similar_pct))
+    log.info('pct_duplicates: {}%'.format(similar_pct))
 
     amount_clusters = len(clusters)
-    print('amount_clusters: {}'.format(amount_clusters))
+    log.info('amount_clusters: {}'.format(amount_clusters))
 
 
 def find_clusters():

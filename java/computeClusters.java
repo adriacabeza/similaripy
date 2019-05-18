@@ -1,3 +1,18 @@
+    public double cosineSimilarity(Map<String, Map<String, Double>> res, String a, String b) {
+        double cosine=0.0;
+        Map<String,Double> wordsA=res.get(a);
+        Map<String,Double> wordsB=res.get(b);
+        Set<String> intersection= new HashSet<String>(wordsA.keySet());
+        intersection.retainAll(wordsB.keySet());
+        for (String s: intersection) {
+            Double forA=wordsA.get(s);
+            Double forB=wordsB.get(s);
+            cosine+=(forA-forB)*(forA-forB);
+        }
+        return cosine;
+    }
+
+
 public OutputComputeClusters computeClusters(String organization, double input_threshold, InputComputeClusters input) throws BadRequestException, NotFoundException, InternalErrorException {
     if (input.getRequirements().size() < 10) throw new BadRequestException("At a minimum there must be 10 entry requirements");
 
@@ -27,7 +42,7 @@ public OutputComputeClusters computeClusters(String organization, double input_t
                 if (j > i) {
                     String req2 = requirements.get(j);
                     if (!model.getDocs().containsKey(req2)) throw new BadRequestException("The loaded model does not contain a requirement with id " + req2);
-                    double score = cosineSimilarity.cosineSimilarity(model.getDocs(), req1, req2);
+                    double score = cosineSimilarity(model.getDocs(), req1, req2);
                     matrix[i][j] = score;
                     matrix[j][i] = score;
                 }

@@ -43,8 +43,9 @@ def get_matrix():
             total_groups = len(duplicates_requisites)
             for dup in tqdm(duplicates_requisites, total=total_groups):
                 correct += _eval_dup(dup, clusters)
+            accuracy = (correct / total_groups) * 100
 
-        log.info('Accuracy: {}%'.format((correct / total_groups) * 100))
+    log.info('ACCURACY: {}%'.format(accuracy))
 
 
 if __name__ == '__main__':

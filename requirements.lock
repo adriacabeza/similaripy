@@ -1,6 +1,10 @@
 requests==2.22.0
+numpy==1.16.3
+nmslib==1.7.3.6
+tqdm==4.32.1
 ## The following requirements were added by pip freeze:
 certifi==2019.3.9
 chardet==3.0.4
 idna==2.8
+pybind11==2.2.4
 urllib3==1.25.2

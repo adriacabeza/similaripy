@@ -10,6 +10,7 @@ from src import *
 from src.util import log
 from src.util import helper
 from src.util.nmslib import Nmslib
+from src.util.timer import Timer
 
 
 def _parse_args():
@@ -19,19 +20,19 @@ def _parse_args():
 
 
 def _search(index):
-    log.info('Loading JSON...')
-    json_path_score = os.path.join(args.data_path, JSON_FILE_NAME)
-    json_path_mapping = os.path.join(args.data_path, MAPPING_FILE_NAME)
-    mapping = helper.load_json(json_path_mapping)
-    score_matrix = helper.load_json(json_path_score)
+    with Timer('Load JSON'):
+        json_path_score = os.path.join(args.data_path, JSON_FILE_NAME)
+        json_path_mapping = os.path.join(args.data_path, MAPPING_FILE_NAME)
+        mapping = helper.load_json(json_path_mapping)
+        score_matrix = helper.load_json(json_path_score)
+
     clusters = {}
     next_id = 0
     req_to_cl = {}
-
-    pbar = tqdm(total= len(score_matrix))
-    for i, embd in enumerate(score_matrix):
-        embd = helper.to_nparray(embd)
-        closest, distances = index.query(embd, NEIGHBOURHOOD_AMOUNT)
+    progress_bar = tqdm(total=len(score_matrix))
+    for i, vector_arrays in enumerate(score_matrix):
+        vector_arrays = helper.to_nparray(vector_arrays)
+        closest, distances = index.query(vector_arrays, NEIGHBOURHOOD_AMOUNT)
 
         similar = {i}
         for j, dist in zip(closest, distances):
@@ -39,7 +40,6 @@ def _search(index):
                 if dist < DISTANCE_THRESHOLD:
                     similar.add(int(j))
 
-        # merge clusters with previously found if possible
         matching_clusters = set()
         for j in similar:
             if j in req_to_cl:
@@ -48,46 +48,47 @@ def _search(index):
         for cl in matching_clusters:
             similar.update(clusters.pop(cl))
 
-        # add new cluster to list
         cl_id = next_id
         next_id += 1
 
         clusters[cl_id] = similar
         for j in similar:
             req_to_cl[j] = cl_id
-        
-        pbar.update(1)
 
-    similars = [list(cl) for cl in clusters.values()]
-    for i in range(0, len(similars)):
-        for j in range(0, len(similars[i])):
-            similars[i][j] = mapping[str(similars[i][j])]  
+        progress_bar.update(1)
+
+    similar_clusters = [list(cl) for cl in clusters.values()]
+    for i in range(0, len(similar_clusters)):
+        for j in range(0, len(similar_clusters[i])):
+            similar_clusters[i][j] = mapping[str(similar_clusters[i][j])]
     
-    return similars
+    return similar_clusters
 
 
 def _metrics(clusters):
+    log.info('METRICS')
+
     total_requirements = int(np.concatenate(clusters).shape[0])
-    log.info('total_requirements: {}'.format(total_requirements))
+    log.info('Total requirements: {}'.format(total_requirements))
 
     dup_clusters = list(filter(lambda x: len(x) > 1, clusters))
     dup_requirements = int(np.concatenate(dup_clusters).shape[0]) if dup_clusters else 0
-    log.info('similar_requirements: {}'.format(dup_requirements))
+    log.info('Similar requirements: {}'.format(dup_requirements))
 
     unique_requirements = total_requirements - dup_requirements
-    log.info('unique_requirements: {}'.format(unique_requirements))
+    log.info('Unique requirements: {}'.format(unique_requirements))
 
     avg_cluster_size = float(np.mean(list(map(len, dup_clusters)))) if dup_requirements else 0
-    log.info('avg_cluster_size: {}'.format(avg_cluster_size))
+    log.info('Average cluster size (for size > 1): {}'.format(avg_cluster_size))
 
     max_cluster_size = int(np.max(list(map(len, dup_clusters)))) if dup_requirements else 0
-    log.info('max_cluster_size: {}'.format(max_cluster_size))
+    log.info('Maximum cluster size: {}'.format(max_cluster_size))
 
     similar_pct = (dup_requirements / total_requirements) * 100
-    log.info('pct_duplicates: {}%'.format(similar_pct))
+    log.info('Percentage of duplicates: {}%'.format(similar_pct))
 
     amount_clusters = len(clusters)
-    log.info('amount_clusters: {}'.format(amount_clusters))
+    log.info('Amount of clusters: {}'.format(amount_clusters))
 
 
 def find_clusters():

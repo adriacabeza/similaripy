@@ -2,13 +2,13 @@ import os
 import argparse
 import json
 
-
 from tqdm import tqdm
 
 from src import *
 from src.util import log
 from src.util import helper
 from src.util.nmslib import Nmslib
+
 
 def _parse_args():
     parser = argparse.ArgumentParser()
@@ -59,17 +59,14 @@ def _search(index):
     return list(clusters)
 
 
-
-def find_clusters(index):
+def find_clusters():
+    index = Nmslib()
+    index.load(fn=os.path.join(args.data_path, INDEX_FILE_NAME))
     clusters = _search(index)
     with open(os.path.join(OUTPUT_PATH, 'clusters.json'), 'w') as f:
-        json.dump(clusters,f)
-
-    
+        json.dump(clusters, f)
 
 
 if __name__ == '__main__':
     args = _parse_args()
-    index = Nmslib()
-    index.load(fn=os.path.join(args.data_path, INDEX_FILE_NAME))
-    find_clusters(index)
+    find_clusters()
